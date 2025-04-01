@@ -26,27 +26,25 @@ void Stack::pushToTopList(char c) {
     top->list->push(c);
 }
 void Stack::pop() {
-    if(top==nullptr) {
-        std::cout<<"Stack is empty"<<std::endl;
+    if (top == nullptr) {
+        std::cout << "Stack is empty" << std::endl;
         return;
     }
 
-    StackNode *temp = top;
+    StackNode* temp = top;
 
-    if(top->prev == nullptr) {
+    if (top->prev == nullptr) {
         top = nullptr;
     }
     else {
         top = top->prev;
-        top->next =nullptr;
+        top->next = nullptr;
     }
 
-
     delete temp;
-    
 }
 void Stack::printStack(StackNode *currentNode,int depth) {
-
+    if(top==nullptr)return;
     if(currentNode==nullptr) {
         printStack(top,depth);
         return;

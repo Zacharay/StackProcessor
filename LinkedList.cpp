@@ -19,7 +19,21 @@ void LinkedList::push(char data) {
     head = newNode;
 }
 
-void LinkedList::pop() {
+void LinkedList::pop(Node *currentNode) {
+    if (currentNode == nullptr) {
+        pop(root);
+        return;  // Prevent double execution
+    }
+
+    if (head == nullptr) return;
+
+    if (currentNode->next == head) {
+        delete head;
+        head = currentNode;
+        head->next = nullptr;
+        return;
+    }
+    pop(currentNode->next);
 
 }
 void LinkedList::copyLinkedList(LinkedList *destination,Node *currentNode){
@@ -46,7 +60,6 @@ void LinkedList:: printRecursive(Node *n) {
     std::cout<<n->data;
 
 }
-
 void LinkedList::print() {
     if(root!=nullptr) {
         printRecursive(root);
@@ -75,6 +88,56 @@ int LinkedList::convertListToNumber(Node *currentNode,int &multiplier,int number
     multiplier *= 10;
 
     return result;
+}
+char LinkedList::getNthElementData(int index,int currentIndex,Node *currentNode) {
+    if(currentNode==nullptr) {
+        return getNthElementData(index,currentIndex,root);
+    }
+
+    if(currentIndex == index) {
+        return currentNode->data;
+    }
+
+    return getNthElementData(index,currentIndex+1,currentNode->next);
+}
+char LinkedList::getLastElementData() {
+    return head->data;
+}
+void LinkedList::negate() {
+
+    if(root==nullptr) {
+        Node *newNode = new Node(nullptr,'-');
+        root = newNode;
+        head = root;
+        return;
+    }
+
+    if(root->data == '-') {
+        Node *temp = root;
+
+        root = root->next;
+        delete temp;
+    }
+    else if(root->data != '-') {
+        Node *newNode = new Node(root,'-');
+        root = newNode;
+    }
+}
+void LinkedList::abs() {
+    if(root==nullptr || root->data !='-')return;
+
+    if(root->data == '-') {
+        Node *temp = root;
+
+        if(root->next == nullptr) {
+            root = nullptr;
+        }
+        else {
+            root = root->next;
+        }
+
+        delete temp;
+    }
 }
 Node *LinkedList::getHead() {
 
