@@ -9,32 +9,31 @@ LinkedList::LinkedList() {
 }
 void LinkedList::push(char data) {
     if(head == nullptr) {
-        head = new Node(nullptr,data);
+        head = new Node(nullptr,nullptr,data);
         root = head;
         return;
     }
 
-    Node *newNode = new Node(nullptr,data);
+    Node *newNode = new Node(nullptr,head,data);
     head->next = newNode;
     head = newNode;
 }
 
-void LinkedList::pop(Node *currentNode) {
-    if (currentNode == nullptr) {
-        pop(root);
-        return;  // Prevent double execution
-    }
+void LinkedList::pop() {
 
-    if (head == nullptr) return;
-
-    if (currentNode->next == head) {
-        delete head;
-        head = currentNode;
-        head->next = nullptr;
+    if(head==nullptr) {
         return;
     }
-    pop(currentNode->next);
-
+    if(head->prev==nullptr) {
+        delete head;
+        head = nullptr;
+        root = nullptr;
+        return;
+    }
+    Node *temp = head;
+    head = head->prev;
+    head->next = nullptr;
+    delete temp;
 }
 void LinkedList::copyLinkedList(LinkedList *destination,Node *currentNode){
     if(currentNode==nullptr) {
@@ -103,10 +102,23 @@ char LinkedList::getNthElementData(int index,int currentIndex,Node *currentNode)
 char LinkedList::getLastElementData() {
     return head->data;
 }
+void LinkedList::pushNumber(int number,int div) {
+    if (number / div < 10) {
+        char c = (number / div) + '0';
+        push(c);
+        return;
+    }
+
+    pushNumber(number, div * 10);
+
+    int temp = (number / div) % 10;
+    char c = temp + '0';
+    push(c);
+}
 void LinkedList::negate() {
 
     if(root==nullptr) {
-        Node *newNode = new Node(nullptr,'-');
+        Node *newNode = new Node(nullptr,nullptr,'-');
         root = newNode;
         head = root;
         return;
@@ -115,11 +127,18 @@ void LinkedList::negate() {
     if(root->data == '-') {
         Node *temp = root;
 
-        root = root->next;
+        if(root->next == nullptr) {
+            root = nullptr;
+        }
+        else {
+            root = root->next;
+            root->prev = nullptr;
+        }
+
         delete temp;
     }
     else if(root->data != '-') {
-        Node *newNode = new Node(root,'-');
+        Node *newNode = new Node(root,nullptr,'-');
         root = newNode;
     }
 }
@@ -134,6 +153,7 @@ void LinkedList::abs() {
         }
         else {
             root = root->next;
+            root->prev = nullptr;
         }
 
         delete temp;

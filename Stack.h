@@ -23,6 +23,7 @@ public:
     void pop();
     void printStack(StackNode *currentNode,int depth);
     void switchTopList();
+    void mergeWithTopList(LinkedList *list);
     LinkedList* getListCopy(int index);
 
     StackNode* getNodeAtIndex(int currentIndex,int finalIndex,StackNode *node);

@@ -74,7 +74,20 @@ void Stack::switchTopList() {
 
     top = secondNode;
 }
+void Stack::mergeWithTopList(LinkedList *list) {
+    if(list->head == nullptr)return;
 
+
+    int data = list->head->data;
+
+    Node *node = new Node(top->list->root,nullptr,data);
+    top->list->root->prev = node;
+    top->list->root = node;
+
+    list->pop();
+
+    mergeWithTopList(list);
+}
 LinkedList* Stack::getListCopy(int index) {
     StackNode *node = getNodeAtIndex(0,index,top);
 

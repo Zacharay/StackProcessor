@@ -6,6 +6,8 @@
 
 
 int main() {
+    
+
     Stack stack;
 
     char input[MAX_INPUT_SIZE+1];
@@ -55,7 +57,9 @@ int main() {
             }
             case '>': {
                 char c = stack.top->list->getLastElementData();
+
                 std::cout<<c;
+
                 stack.pop();
                 break;
             }
@@ -68,6 +72,53 @@ int main() {
                 break;
             }
             case '$': {
+                char c = stack.top->list->getLastElementData();
+                stack.top->list->pop();
+
+                LinkedList *list = new LinkedList();
+                stack.push(list);
+                stack.pushToTopList(c);
+
+                break;
+            }
+            case ']': {
+                int multiplier = 1;
+                int number = stack.top->list->convertListToNumber(nullptr,multiplier,0);
+                stack.pop();
+
+                LinkedList *list = new LinkedList();
+                stack.push(list);
+
+                char c = (char)number;
+
+                stack.pushToTopList(c);
+
+                break;
+            }
+            case '[': {
+                char c = stack.top->list->getLastElementData();
+
+                int number = (int)c;
+                stack.pop();
+
+                LinkedList *list = new LinkedList();
+                list->pushNumber(number);
+
+                stack.push(list);
+
+                break;
+            }
+            case '#': {
+                LinkedList *list = new LinkedList();
+                stack.top->list->copyLinkedList(list,nullptr);
+
+                stack.pop();
+
+                stack.mergeWithTopList(list);
+                break;
+            }
+            case '+': {
+                stack.top->list->pop();
                 break;
             }
             case '&': {
