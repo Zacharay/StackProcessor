@@ -14,11 +14,10 @@ struct Node {
 
 class LinkedList {
 
-
-
-    bool isNumber=true;
-    bool isNegative=true;
+    bool isNumber=false;
 public:
+    bool isListEmpty = true;
+    bool isNegative=false;
     Node *root;
     Node *head;
     LinkedList();
@@ -35,6 +34,9 @@ public:
     void negate();
     void abs();
     void copyLinkedList(LinkedList *destination,Node *currentNode);
+    void removeLeadingZeros();
+
+    int getLength(int currentLength,Node *currentNode);
 private:
     void printRecursive(Node *n);
 };

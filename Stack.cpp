@@ -88,6 +88,47 @@ void Stack::mergeWithTopList(LinkedList *list) {
 
     mergeWithTopList(list);
 }
+bool Stack::areLinkedListsEqual(LinkedList *list1,LinkedList *list2) {
+
+
+
+    if(list1->isListEmpty&&list2->isListEmpty)return true;
+
+    if(list1->isListEmpty||list2->isListEmpty)return false;
+
+    if(list1->head->data != list2->head->data) {
+
+        return false;
+    }
+
+    list1->pop();
+    list2->pop();
+    return areLinkedListsEqual(list1,list2);
+
+}
+bool Stack::isAGreaterThanB(LinkedList *a,LinkedList *b) {
+
+    if((int)b->root->data < (int)a->root->data) {
+        return true;
+    }
+    else if((int)b->root->data > (int)a->root->data) {
+        return false;
+    }
+
+    if(b->root->next==nullptr && a->root->next==nullptr) {
+        return false;
+    }
+
+    Node *temp = b->root;
+    b->root = b->root->next;
+    delete temp;
+    Node *temp1 = a->root;
+    a->root = a->root->next;
+    delete temp1;
+    return isAGreaterThanB(a,b);
+
+}
+
 LinkedList* Stack::getListCopy(int index) {
     StackNode *node = getNodeAtIndex(0,index,top);
 

@@ -24,7 +24,10 @@ public:
     void printStack(StackNode *currentNode,int depth);
     void switchTopList();
     void mergeWithTopList(LinkedList *list);
+    bool areLinkedListsEqual(LinkedList *list1,LinkedList *list2);
     LinkedList* getListCopy(int index);
+
+    bool isAGreaterThanB(LinkedList *a,LinkedList *b);
 
     StackNode* getNodeAtIndex(int currentIndex,int finalIndex,StackNode *node);
     void pushToTopList(char c);

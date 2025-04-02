@@ -8,11 +8,14 @@ LinkedList::LinkedList() {
     root = nullptr;
 }
 void LinkedList::push(char data) {
+
     if(head == nullptr) {
         head = new Node(nullptr,nullptr,data);
         root = head;
+        isListEmpty = false;
         return;
     }
+
 
     Node *newNode = new Node(nullptr,head,data);
     head->next = newNode;
@@ -22,12 +25,14 @@ void LinkedList::push(char data) {
 void LinkedList::pop() {
 
     if(head==nullptr) {
+
         return;
     }
     if(head->prev==nullptr) {
         delete head;
         head = nullptr;
         root = nullptr;
+        isListEmpty = true;
         return;
     }
     Node *temp = head;
@@ -102,6 +107,24 @@ char LinkedList::getNthElementData(int index,int currentIndex,Node *currentNode)
 char LinkedList::getLastElementData() {
     return head->data;
 }
+void LinkedList::removeLeadingZeros() {
+    if(root==nullptr)return;
+
+    if(root->next==nullptr && root->data == '0') {
+        root=nullptr;
+        isListEmpty = true;
+        return;
+    }
+
+    if(root->data == '0' || root->data=='-') {
+        Node *temp = root;
+        root = root->next;
+        root->prev = nullptr;
+        removeLeadingZeros();
+        delete temp;
+    }
+
+}
 void LinkedList::pushNumber(int number,int div) {
     if (number / div < 10) {
         char c = (number / div) + '0';
@@ -119,8 +142,10 @@ void LinkedList::negate() {
 
     if(root==nullptr) {
         Node *newNode = new Node(nullptr,nullptr,'-');
+        isNegative = true;
         root = newNode;
         head = root;
+        isListEmpty = false;
         return;
     }
 
@@ -134,11 +159,12 @@ void LinkedList::negate() {
             root = root->next;
             root->prev = nullptr;
         }
-
+        isNegative = false;
         delete temp;
     }
     else if(root->data != '-') {
         Node *newNode = new Node(root,nullptr,'-');
+        isNegative = true;
         root = newNode;
     }
 }
@@ -155,10 +181,20 @@ void LinkedList::abs() {
             root = root->next;
             root->prev = nullptr;
         }
-
+        isNegative = false;
         delete temp;
     }
 }
-Node *LinkedList::getHead() {
+int LinkedList::getLength(int currentLength,Node *currentNode) {
 
+    if(currentNode==nullptr) {
+        return getLength(1,root);
+    }
+
+    if(currentNode->next == nullptr) {
+        return currentLength;
+    }
+
+    return getLength(currentLength+1,currentNode->next);
 }
+
