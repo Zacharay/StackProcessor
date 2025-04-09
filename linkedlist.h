@@ -12,7 +12,7 @@ struct Node {
     }
 };
 
-class LinkedList {
+class linkedlist {
 
     bool isNumber=false;
 public:
@@ -20,8 +20,9 @@ public:
     bool isNegative=false;
     Node *root;
     Node *head;
-    LinkedList();
+    linkedlist();
     void push(char data);
+    void pushAtBeginning(char data) ;
     void pop();
     void print();
     Node *getHead();
@@ -29,11 +30,11 @@ public:
 
     int convertListToNumber(Node *currentNode,int &multiplier,int number);
     char getNthElementData(int index,int currentIndex,Node *currentNode) ;
-    char getLastElementData();
+    char getLastElementData()const;
     void pushNumber(int number, int div=1);
     void negate();
     void abs();
-    void copyLinkedList(LinkedList *destination,Node *currentNode);
+    void copyLinkedList(linkedlist *destination,Node *currentNode);
     void removeLeadingZeros();
 
     int getLength(int currentLength,Node *currentNode);

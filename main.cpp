@@ -1,22 +1,21 @@
 #include <iostream>
-#include "Stack.h"
+#include "stack.h"
 
 #define MAX_INPUT_SIZE 20000
 
-
-
 int main() {
+
     Stack stack;
     char input[MAX_INPUT_SIZE+1];
 
     int currentInputIndex = 0;
     std::cin>>input;
-
+    int i=0;
     while(input[currentInputIndex]!='\0') {
         char c = input[currentInputIndex++];
         switch(c) {
             case '\'': {
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 stack.push(list);
                 break;
             }
@@ -25,7 +24,7 @@ int main() {
                 break;
             }
             case ':': {
-                LinkedList *list = stack.getListCopy(0);
+                linkedlist *list = stack.getListCopy(0);
 
                 stack.push(list);
                 break;
@@ -39,7 +38,7 @@ int main() {
                 int index = stack.top->list->convertListToNumber(nullptr,multiplier,0);
                 stack.pop();
 
-               LinkedList *list = stack.getListCopy(index);
+               linkedlist *list = stack.getListCopy(index);
 
                 stack.push(list);
                 break;
@@ -72,7 +71,7 @@ int main() {
                 char c = stack.top->list->getLastElementData();
                 stack.top->list->pop();
 
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 stack.push(list);
                 stack.pushToTopList(c);
 
@@ -83,7 +82,7 @@ int main() {
                 int number = stack.top->list->convertListToNumber(nullptr,multiplier,0);
                 stack.pop();
 
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 stack.push(list);
 
                 char c = (char)number;
@@ -98,7 +97,7 @@ int main() {
                 int number = (int)c;
                 stack.pop();
 
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 list->pushNumber(number);
 
                 stack.push(list);
@@ -106,7 +105,7 @@ int main() {
                 break;
             }
             case '~': {
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
 
 
                 if(currentInputIndex <10) {
@@ -127,13 +126,13 @@ int main() {
                     stack.top->list->head->prev==nullptr
                     )) {
                     stack.pop();
-                    LinkedList *list = new LinkedList();
+                    linkedlist *list = new linkedlist();
                     list->push('1');
                     stack.push(list);
                 }
                 else {
                     stack.pop();
-                    LinkedList *list = new LinkedList();
+                    linkedlist *list = new linkedlist();
                     list->push('0');
                     stack.push(list);
                 }
@@ -141,7 +140,7 @@ int main() {
                 break;
             }
             case '#': {
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 stack.top->list->copyLinkedList(list,nullptr);
 
                 stack.pop();
@@ -152,11 +151,14 @@ int main() {
             case '=': {
                 bool areEqual = true;
 
-                LinkedList *list1 = stack.top->list;
+                linkedlist *list1 = stack.top->list;
                 list1->removeLeadingZeros();
                 stack.pop();
-                LinkedList *list2 = stack.top->list;
+                linkedlist *list2 = stack.top->list;
                 list2->removeLeadingZeros();
+
+
+
 
                 stack.pop();
 
@@ -169,10 +171,11 @@ int main() {
 
 
                 if(!stack.areLinkedListsEqual(list1,list2)) {
+
                     areEqual = false;
                 }
 
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 if(areEqual) {
                     list->push('1');
                 }
@@ -183,10 +186,11 @@ int main() {
                 break;
             }
             case '<': {
-                LinkedList *a = stack.top->list;
+                linkedlist *a = stack.top->list;
                 stack.pop();
-                LinkedList *b = stack.top->list;
+                linkedlist *b = stack.top->list;
                 stack.pop();
+
                 a->removeLeadingZeros();
                 b->removeLeadingZeros();
 
@@ -194,12 +198,12 @@ int main() {
                 bool condition = true;//a>b
                 if(a->isListEmpty && b->isListEmpty) {
                     condition = false;
-
                 }
                 else if(a->isNegative && !b->isNegative) {
                     condition = false;
                 }
                 else if(a->isNegative == b->isNegative) {
+
                     if(a->getLength(0,nullptr) < b->getLength(0,nullptr)) {
                         condition = false;
                         if(a->isNegative && b->isNegative) {
@@ -207,18 +211,16 @@ int main() {
                         }
                     }
                     else if(a->getLength(0,nullptr) == b->getLength(0,nullptr)) {
-
                         condition = stack.isAGreaterThanB(a,b);
 
                         if(a->isNegative && b->isNegative && !stack.areLinkedListsEqual(a,b)) {
-
                             condition = !condition;
                         }
                     }
 
                 }
 
-                LinkedList *list = new LinkedList();
+                linkedlist *list = new linkedlist();
                 if(condition) {
                     list->push('1');
                 }
@@ -228,9 +230,73 @@ int main() {
                 stack.push(list);
                 break;
             }
-            case '+': {
-                stack.top->list->pop();
+            case '?': {
+                int multiplier = 1;
+                int T = stack.top->list->convertListToNumber(nullptr,multiplier,1);
+                stack.pop();
 
+                int listLength = stack.top->list->getLength(0,nullptr);
+
+                if(listLength > 0  && stack.top->list->head->data != '0') {
+
+                    currentInputIndex = T;
+                }
+
+                stack.pop();
+                break;
+            }
+            case '+': {
+                linkedlist *a = stack.top->list;
+                stack.pop();
+                linkedlist *b = stack.top->list;
+                stack.pop();
+
+                linkedlist *sum = new linkedlist();
+
+
+                if(!a->isNegative && !b->isNegative) {
+                    stack.addTwoNumbers(a->head,b->head,0,sum);
+                }
+                else if(a->isNegative  && b->isNegative) {
+
+                    a->abs();
+                    b->abs();
+                    stack.addTwoNumbers(a->head,b->head,0,sum);
+                    sum->pushAtBeginning('-');
+                }
+                else {
+                    bool isANegative = a->isNegative;
+                    bool isBNegative = b->isNegative;
+                    b->abs();
+                    a->abs();
+                    a->removeLeadingZeros();
+                    b->removeLeadingZeros();
+
+
+                    if(stack.isAGreaterThanBb(a,b)) {
+                        stack.substractTwoNumbers(a->head,b->head,0,sum);
+
+                        sum->removeLeadingZeros();
+
+                        if(isANegative && sum->head->data != '0') {
+                            sum->pushAtBeginning('-');
+                            sum->isNegative = true;
+                        }
+                    }
+                    else {
+
+                        stack.substractTwoNumbers(b->head,a->head,0,sum);
+
+                        sum->removeLeadingZeros();
+
+                        if(isBNegative && sum->head->data != '0') {
+                            sum->pushAtBeginning('-');
+                            sum->isNegative = true;
+                        }
+                    }
+
+                }
+                stack.push(sum);
                 break;
             }
             case '&': {

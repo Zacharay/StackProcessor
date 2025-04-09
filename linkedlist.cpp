@@ -1,13 +1,13 @@
-#include "LinkedList.h"
+#include "linkedlist.h"
 
 #include <iostream>
 
 
-LinkedList::LinkedList() {
+linkedlist::linkedlist() {
     head = nullptr;
     root = nullptr;
 }
-void LinkedList::push(char data) {
+void linkedlist::push(char data) {
 
     if(head == nullptr) {
         head = new Node(nullptr,nullptr,data);
@@ -21,8 +21,20 @@ void LinkedList::push(char data) {
     head->next = newNode;
     head = newNode;
 }
+void linkedlist::pushAtBeginning(char data) {
+    if(root == nullptr) {
+        head = new Node(nullptr,nullptr,data);
+        root = head;
+        isListEmpty = false;
+        return;
+    }
 
-void LinkedList::pop() {
+    Node *newNode = new Node(root,nullptr,data);
+    root->prev = newNode;
+    root = newNode;
+}
+
+void linkedlist::pop() {
 
     if(head==nullptr) {
 
@@ -40,7 +52,11 @@ void LinkedList::pop() {
     head->next = nullptr;
     delete temp;
 }
-void LinkedList::copyLinkedList(LinkedList *destination,Node *currentNode){
+void linkedlist::copyLinkedList(linkedlist *destination,Node *currentNode){
+    if(root==nullptr) {
+        return;
+    }
+
     if(currentNode==nullptr) {
         copyLinkedList(destination,root);
         return;
@@ -54,7 +70,7 @@ void LinkedList::copyLinkedList(LinkedList *destination,Node *currentNode){
     destination->push(currentNode->data);
     copyLinkedList(destination,currentNode->next);
 }
-void LinkedList:: printRecursive(Node *n) {
+void linkedlist:: printRecursive(Node *n) {
     if(n->next == nullptr) {
         std::cout<<n->data;
         return;
@@ -64,13 +80,13 @@ void LinkedList:: printRecursive(Node *n) {
     std::cout<<n->data;
 
 }
-void LinkedList::print() {
+void linkedlist::print() {
     if(root!=nullptr) {
         printRecursive(root);
     }
 
 }
-int LinkedList::convertListToNumber(Node *currentNode,int &multiplier,int number)
+int linkedlist::convertListToNumber(Node *currentNode,int &multiplier,int number)
 {
     if(currentNode==nullptr) {
         return convertListToNumber(root,multiplier,number);
@@ -93,7 +109,7 @@ int LinkedList::convertListToNumber(Node *currentNode,int &multiplier,int number
 
     return result;
 }
-char LinkedList::getNthElementData(int index,int currentIndex,Node *currentNode) {
+char linkedlist::getNthElementData(int index,int currentIndex,Node *currentNode) {
     if(currentNode==nullptr) {
         return getNthElementData(index,currentIndex,root);
     }
@@ -104,15 +120,16 @@ char LinkedList::getNthElementData(int index,int currentIndex,Node *currentNode)
 
     return getNthElementData(index,currentIndex+1,currentNode->next);
 }
-char LinkedList::getLastElementData() {
+char linkedlist::getLastElementData() const{
     return head->data;
 }
-void LinkedList::removeLeadingZeros() {
+void linkedlist::removeLeadingZeros() {
     if(root==nullptr)return;
 
     if(root->next==nullptr && root->data == '0') {
-        root=nullptr;
-        isListEmpty = true;
+        //root=nullptr;
+        //isListEmpty = true;
+        isNegative = false;
         return;
     }
 
@@ -125,7 +142,7 @@ void LinkedList::removeLeadingZeros() {
     }
 
 }
-void LinkedList::pushNumber(int number,int div) {
+void linkedlist::pushNumber(int number,int div) {
     if (number / div < 10) {
         char c = (number / div) + '0';
         push(c);
@@ -138,7 +155,7 @@ void LinkedList::pushNumber(int number,int div) {
     char c = temp + '0';
     push(c);
 }
-void LinkedList::negate() {
+void linkedlist::negate() {
 
     if(root==nullptr) {
         Node *newNode = new Node(nullptr,nullptr,'-');
@@ -162,13 +179,13 @@ void LinkedList::negate() {
         isNegative = false;
         delete temp;
     }
-    else if(root->data != '-') {
+    else{
         Node *newNode = new Node(root,nullptr,'-');
         isNegative = true;
         root = newNode;
     }
 }
-void LinkedList::abs() {
+void linkedlist::abs() {
     if(root==nullptr || root->data !='-')return;
 
     if(root->data == '-') {
@@ -185,7 +202,9 @@ void LinkedList::abs() {
         delete temp;
     }
 }
-int LinkedList::getLength(int currentLength,Node *currentNode) {
+int linkedlist::getLength(int currentLength,Node *currentNode) {
+
+    if(root==nullptr)return 0;
 
     if(currentNode==nullptr) {
         return getLength(1,root);
